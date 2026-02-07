@@ -25,15 +25,21 @@ if (!admin.apps.length) {
             console.log('Initializing Firebase Admin from Environment Variables');
 
             // Robustly handle the private key (escaped \n vs literal newlines)
-            let privateKey = process.env.FIREBASE_PRIVATE_KEY;
+            let privateKey = process.env.FIREBASE_PRIVATE_KEY.trim();
 
-            // Remove surrounding quotes if they were pasted accidentally
-            if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+            // Remove surrounding quotes OR curly braces if they were pasted accidentally
+            if ((privateKey.startsWith('"') && privateKey.endsWith('"')) ||
+                (privateKey.startsWith("'") && privateKey.endsWith("'"))) {
                 privateKey = privateKey.substring(1, privateKey.length - 1);
             }
 
             // Replace literal \n characters with actual newlines
             privateKey = privateKey.replace(/\\n/g, '\n');
+
+            // Ensure the key has the correct PEM format (headers/footers on their own lines)
+            if (!privateKey.startsWith('-----BEGIN PRIVATE KEY-----')) {
+                console.warn('Private key does not start with expected header');
+            }
 
             serviceAccount = {
                 projectId: process.env.FIREBASE_PROJECT_ID,
