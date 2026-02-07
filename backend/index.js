@@ -1,5 +1,7 @@
-﻿import express from 'express';
-import dotenv from 'dotenv';
+﻿import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -9,9 +11,6 @@ import aiRoutes from './routes/aiRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
 import templateRoutes from './routes/templateRoutes.js';
 import db from './config/firestore.js';
-
-// Load env vars
-dotenv.config();
 
 // Note: Using Firestore (Firebase) as database - no connection needed
 
@@ -79,13 +78,13 @@ const autoSeedTemplates = async () => {
     try {
         const templatesSnapshot = await db.collection('templates').get();
         const expectedCount = 6; // Update this when adding new templates
-        
+
         if (templatesSnapshot.size !== expectedCount) {
             console.log(`Template count mismatch: ${templatesSnapshot.size} found, ${expectedCount} expected. Auto-seeding...`);
-            
+
             // Import and call seed logic
             const { seedTemplates } = await import('./controllers/templateController.js');
-            
+
             // Create mock req/res for seedTemplates
             const mockReq = {};
             const mockRes = {
@@ -96,7 +95,7 @@ const autoSeedTemplates = async () => {
                     }
                 })
             };
-            
+
             await seedTemplates(mockReq, mockRes);
         } else {
             console.log(`Templates already seeded (${templatesSnapshot.size} templates)`);
@@ -109,7 +108,7 @@ const autoSeedTemplates = async () => {
 app.listen(PORT, async () => {
     console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
     console.log("Payload limit set to 50MB");
-    
+
     // Auto-seed templates after server starts
     await autoSeedTemplates();
 });
