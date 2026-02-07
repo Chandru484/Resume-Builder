@@ -18,13 +18,22 @@ dotenv.config();
 const app = express();
 
 // Middlewares
+const allowedOrigins = [
+    'https://resumeai-frontend-production-a0a4.up.railway.app',
+    'https://your-vercel-domain.vercel.app', // User will replace this or add theirs
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-        ? [
-            'https://resumeai-frontend-production-a0a4.up.railway.app',
-            process.env.FRONTEND_URL
-        ].filter(Boolean)
-        : ['http://localhost:5173', 'http://localhost:5174'],
+    origin: (origin, callback) => {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1 && process.env.NODE_ENV === 'production') {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
