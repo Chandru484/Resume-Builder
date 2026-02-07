@@ -14,6 +14,12 @@ if (!admin.apps.length) {
     try {
         let serviceAccount;
 
+        // Diagnostic logs (Redacted for security)
+        console.log('Checking Environment Variables:');
+        console.log('- FIREBASE_PROJECT_ID:', process.env.FIREBASE_PROJECT_ID ? 'EXISTS' : 'MISSING');
+        console.log('- FIREBASE_CLIENT_EMAIL:', process.env.FIREBASE_CLIENT_EMAIL ? 'EXISTS' : 'MISSING');
+        console.log('- FIREBASE_PRIVATE_KEY:', process.env.FIREBASE_PRIVATE_KEY ? 'EXISTS' : 'MISSING');
+
         // Check for environment variables (Production)
         if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
             console.log('Initializing Firebase Admin from Environment Variables');
