@@ -36,7 +36,7 @@ const Footer = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t text-center text-gray-400 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
                 <p>&copy; 2026 ResumeAI Builder. All rights reserved.</p>
-                <p className="flex items-center gap-1">Made by Elan</p>
+                <p className="flex items-center gap-1">Made by Pravin</p>
             </div>
         </footer>
     );
