@@ -1,9 +1,12 @@
-﻿import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 import userRoutes from './routes/userRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
@@ -19,7 +22,9 @@ const app = express();
 // Middlewares
 const allowedOrigins = [
     'https://resumeai-frontend-production-a0a4.up.railway.app',
+    'https://resume-builder-7gvd.onrender.com',
     'https://your-vercel-domain.vercel.app', // User will replace this or add theirs
+    process.env.RENDER_EXTERNAL_URL,
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -61,6 +66,29 @@ app.get('/api/health', (req, res) => {
         uptime: process.uptime()
     });
 });
+
+// Serve built frontend in production (or whenever frontend/dist exists)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDistPath = path.resolve(__dirname, '../frontend/dist');
+const frontendIndexPath = path.join(frontendDistPath, 'index.html');
+
+if (fs.existsSync(frontendIndexPath)) {
+    app.use(express.static(frontendDistPath));
+    app.use((req, res, next) => {
+        if (req.method === 'GET' && !req.path.startsWith('/api')) {
+            return res.sendFile(frontendIndexPath);
+        }
+        next();
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.status(200).json({
+            status: 'ok',
+            message: 'Resume Builder API is running (frontend build not found)'
+        });
+    });
+}
 
 // Error Handling
 app.use((err, req, res, next) => {
