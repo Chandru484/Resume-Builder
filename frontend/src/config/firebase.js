@@ -1,16 +1,20 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBvQ27ZxZc9g8N-UKoOX6Rg_EHncpvEQhA",
-    authDomain: "resumeai-e913e.firebaseapp.com",
-    projectId: "resumeai-e913e",
-    storageBucket: "resumeai-e913e.firebasestorage.app",
-    messagingSenderId: "764121557450",
-    appId: "1:764121557450:web:7802b55aacf65b5b3b0733",
-    measurementId: "G-TK6FMELWB0"
+  apiKey: "AIzaSyB_NGpCSqaJSqiw3-qlG5iAbxBFOYRSNsU",
+  authDomain: "resume-builder-ai-dcfc5.firebaseapp.com",
+  projectId: "resume-builder-ai-dcfc5",
+  storageBucket: "resume-builder-ai-dcfc5.firebasestorage.app",
+  messagingSenderId: "917495272144",
+  appId: "1:917495272144:web:73f8cad9e6a60e30dd44d5",
+  measurementId: "G-TZLCJRWVQN"
 };
 
 // Initialize Firebase
